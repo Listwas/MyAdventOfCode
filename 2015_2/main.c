@@ -31,7 +31,7 @@ int main() {
 
 
     int l, w, h;
-    char *ptr = f_con;
+    char *ptr = f_con;`
     int sum = 0;
 
     while (*ptr) {
