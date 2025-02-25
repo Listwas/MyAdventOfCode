@@ -1,55 +1,53 @@
 #include <stdio.h>
 
-int smallest_num(int a, int b, int c) {
+void find_two_smallest(int a, int b, int c, int *smallest, int *second_smallest) {
     if (a <= b && a <= c) {
-        return a;
+        *smallest = a;
+        *second_smallest = (b <= c) ? b : c;
     } 
     else if (b <= a && b <= c) {
-        return b;
+        *smallest = b;
+        *second_smallest = (a <= c) ? a : c;
     }
     else {
-        return c;
+        *smallest = c;
+        *second_smallest = (a <= b) ? a : b;
     }
 }
 
-int main() {    
+int main() {
     FILE *f = fopen("input", "r");
-
     if (!f) {
         perror("file error: open\n");
         return 1;
     }
 
-    fseek(f, 0, SEEK_END);
-    int f_len = ftell(f);
-    fseek(f, 0, SEEK_SET);
-
-    char f_con[f_len + 1];
-    fread(f_con, 1, f_len, f);
-    f_con[f_len] = 0;
-    fclose(f);
-
-
     int l, w, h;
-    char *ptr = f_con;`
-    int sum = 0;
+    int total_paper = 0;
+    int total_ribbon = 0;
 
-    while (*ptr) {
-        int consumed;
-        if (sscanf(ptr, "%dx%dx%d%n", &l, &w, &h, &consumed) == 3){
-            // printf("l=%d\nw=%d\nh=%d\n", l, w, h);
-            int x = l * h;
-            int y = w * h;
-            int z = l * w;
+    while (fscanf(f, "%dx%dx%d", &l, &w, &h) == 3) {
+        // wrapping paper 
+        int area1 = l * w;
+        int area2 = w * h;
+        int area3 = h * l;
+        
+        int smallest_area, trash;
+        find_two_smallest(area1, area2, area3, &smallest_area, &trash);
 
-            int smallest = smallest_num(x, y, z);
-            int bracket = 2 * (x + y + z) + smallest;  
+        int surface_area = 2 * (area1 + area2 + area3);
+        total_paper += surface_area + smallest_area;
 
-            sum += bracket;
-            ptr += consumed;
-        } else {
-            break;
-        }
+        // ribbon calculations
+        int smallest, second_smallest;
+        find_two_smallest(l, w, h, &smallest, &second_smallest);
+
+        int perimeter = 2 * (smallest + second_smallest);
+        int volume = l * h * w;
+        total_ribbon += perimeter + volume;
     }
-    printf("%d\n", sum);
+    fclose(f);
+    
+    printf("total square feet of wrapping paper: %d\n", total_paper);
+    printf("total feet of ribbon to order: %d\n", total_ribbon);
 }
