@@ -16,7 +16,7 @@ void find_two_smallest(int a, int b, int c, int *smallest, int *second_smallest)
 }
 
 int main() {
-    FILE *f = fopen("input", "r");
+    FILE *f = fopen("input.txt", "r");
     if (!f) {
         perror("file error: open\n");
         return 1;
