@@ -14,22 +14,24 @@ int main() {
     f_con[f_len] = 0; // add 0 to the end of file so printf wont crash
     // printf("%s", f_con);
     
-    int floor = 1;
-    int check = 0;
-    for (int i = 0; i < f_len; i++) { // go through each char and update counter    
+    int floor = 0;
+    int check = -1;
+
+    // go through each char and update counter
+    for (int i = 0; i < f_len; i++) {     
         if (f_con[i] == '(') {
             floor++;
         } else if (f_con[i] == ')') {
             floor--;
         }
 
-        if (floor == -1 && check == 0) {
+        if (floor == -1 && check == -1) {
             check = i + 1;
         } 
     }
 
 
-    printf("ending floor: %d\n", floor - 1);
-    printf("position: %d\n", check - 1);
+    printf("ending floor: %d\n", floor);
+    printf("position: %d\n", check);
     fclose(f);
 }
