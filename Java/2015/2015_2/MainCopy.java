@@ -38,5 +38,7 @@ public class Main {
 
         return surfaceArea + smallestSide;
     }
-
+    // TODO
+    // A present with dimensions 2x3x4 requires 2+2+3+3 = 10 feet of ribbon to wrap
+    // the present plus 2*3*4 = 24 feet of ribbon for the bow, for a total of 34 feet.
 }
