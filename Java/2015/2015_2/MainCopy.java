@@ -10,35 +10,45 @@ public class Main {
             String[] split = fCon.split("[x\n]");
             int fLen = split.length;
 
-            // get l, w, h for further calculations
             int totalWrap = 0;
+            int totalRibbon = 0;
             for (int i = 0; i < fLen; i += 3) {
+                // get dimensions
                 int length = Integer.parseInt(split[i]);
                 int width = Integer.parseInt(split[i + 1]);
                 int height = Integer.parseInt(split[i + 2]);
 
-                totalWrap += getRes(length, width, height);
+                // calculate areas
+                int area1 = length * width;
+                int area2 = width * height;
+                int area3 = height * length;
+
+                // wrapping paper calculations
+                int surfaceArea = 2 * (length * width + width * height + height * length);
+                int smallestSide = Math.min(Math.min(area1, area2), area3);
+                totalWrap += smallestSide + surfaceArea;
+
+                // ribbon calculations
+                int perimeter = smallestPerimeter(length, width, height);
+                int volume = length * width * height;
+                totalRibbon += perimeter + volume;
             }
 
             System.out.println("total square feet of wrapping paper: " + totalWrap);
+            System.out.println("total feet of ribbon to order: " + totalRibbon);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    private static int getRes(int length, int width, int height) {
-        // calculate surface area
-        int surfaceArea = 2 * (length * width + width * height + height * length);
 
-        // calculate the area of the smallest side
-        int area1 = length * width;
-        int area2 = width * height;
-        int area3 = height * length;
-        int smallestSide = Math.min(Math.min(area1, area2), area3);
-
-        return surfaceArea + smallestSide;
+    private static int smallestPerimeter(int length, int width, int height) {
+        if (length >= width && length >= height) {
+            return 2 * (width + height);
+        } else if (width >= length && width >= height) {
+            return 2 * (length + height);
+        } else {
+            return 2 * (length + width);
+        }
     }
-    // TODO
-    // A present with dimensions 2x3x4 requires 2+2+3+3 = 10 feet of ribbon to wrap
-    // the present plus 2*3*4 = 24 feet of ribbon for the bow, for a total of 34 feet.
 }
